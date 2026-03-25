@@ -1,5 +1,5 @@
-import { TrendingUp, TrendingDown, type LucideIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUpRight, ArrowDownRight, type LucideIcon } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 interface StatCardProps {
   icon: LucideIcon;
@@ -7,15 +7,18 @@ interface StatCardProps {
   label: string;
   change: number;
   delay?: number;
+  headerColor?: string;
 }
 
-const StatCard = ({ icon: Icon, value, label, change, delay = 0 }: StatCardProps) => {
+const StatCard = ({ icon: Icon, value, label, change, delay = 0, headerColor = "widget-header-1" }: StatCardProps) => {
   const [displayValue, setDisplayValue] = useState(0);
+  const [bouncing, setBouncing] = useState(false);
+  const prevValue = useRef(0);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const duration = 1200;
-      const steps = 40;
+      const duration = 1400;
+      const steps = 50;
       const increment = value / steps;
       let current = 0;
       const interval = setInterval(() => {
@@ -23,6 +26,8 @@ const StatCard = ({ icon: Icon, value, label, change, delay = 0 }: StatCardProps
         if (current >= value) {
           setDisplayValue(value);
           clearInterval(interval);
+          setBouncing(true);
+          setTimeout(() => setBouncing(false), 400);
         } else {
           setDisplayValue(Math.floor(current));
         }
@@ -35,34 +40,31 @@ const StatCard = ({ icon: Icon, value, label, change, delay = 0 }: StatCardProps
   const isPositive = change >= 0;
 
   return (
-    <div className="glass-card p-5 animate-slide-up" style={{ animationDelay: `${delay}ms` }}>
-      <div className="flex items-start justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-primary">
-          <Icon className="h-5 w-5 text-primary-foreground" />
-        </div>
-        <div
-          className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
-            isPositive
-              ? "bg-primary/10 text-primary"
-              : "bg-destructive/10 text-destructive"
-          }`}
-        >
-          {isPositive ? (
-            <TrendingUp className="h-3 w-3" />
-          ) : (
-            <TrendingDown className="h-3 w-3" />
-          )}
-          {isPositive ? "+" : ""}
-          {change}%
-        </div>
+    <div className="glass-card animate-slide-up" style={{ animationDelay: `${delay}ms` }}>
+      <div className={`${headerColor} px-4 py-2 flex items-center gap-2`}>
+        <Icon className="h-4 w-4 text-primary-foreground" />
+        <span className="text-xs font-semibold text-primary-foreground uppercase tracking-wider">{label}</span>
       </div>
-      <div className="mt-3">
-        <p className="text-3xl font-extrabold tracking-tight font-mono">
-          {displayValue.toLocaleString()}
-        </p>
-        <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          {label}
-        </p>
+      <div className="p-5">
+        <div className="flex items-end justify-between">
+          <p className={`text-4xl font-black tracking-tight font-mono transition-transform ${bouncing ? "counter-bounce" : ""}`}>
+            {displayValue.toLocaleString()}
+          </p>
+          <div
+            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
+              isPositive
+                ? "bg-primary/10 text-primary"
+                : "bg-destructive/10 text-destructive"
+            }`}
+          >
+            {isPositive ? (
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            ) : (
+              <ArrowDownRight className="h-3.5 w-3.5" />
+            )}
+            {isPositive ? "+" : ""}{change}%
+          </div>
+        </div>
       </div>
     </div>
   );

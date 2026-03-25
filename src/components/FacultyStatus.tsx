@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { UserCheck } from "lucide-react";
 
 const faculty = [
   { name: "Bryan Abad", subject: "Mathematics", status: "present", initials: "BA" },
@@ -17,28 +17,37 @@ const statusColor: Record<string, string> = {
   absent: "bg-destructive",
 };
 
+const statusLabel: Record<string, string> = {
+  present: "Present",
+  late: "Late",
+  absent: "Absent",
+};
+
 const FacultyStatus = () => {
   return (
-    <div className="glass-card overflow-hidden animate-slide-up" style={{ animationDelay: "400ms" }}>
-      <div className="gradient-primary px-5 py-3 flex items-center gap-2">
-        <Users className="h-5 w-5 text-primary-foreground" />
+    <div className="glass-card animate-slide-up" style={{ animationDelay: "400ms" }}>
+      <div className="widget-header-3 px-5 py-3 flex items-center gap-2">
+        <UserCheck className="h-5 w-5 text-primary-foreground" />
         <h3 className="text-sm font-bold text-primary-foreground">Faculty Status — Live</h3>
       </div>
       <div className="divide-y divide-border">
         {faculty.map((f, i) => (
           <div
             key={f.name}
-            className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-secondary/50 animate-slide-in-left"
+            className="flex items-center gap-3 px-5 py-3 transition-all duration-200 hover:bg-secondary/50 animate-slide-in-left"
             style={{ animationDelay: `${500 + i * 80}ms` }}
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground shrink-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary text-xs font-bold text-primary-foreground shrink-0 transition-transform duration-200 hover:scale-110">
               {f.initials}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">{f.name}</p>
               <p className="text-xs text-muted-foreground">{f.subject}</p>
             </div>
-            <span className={`h-2.5 w-2.5 rounded-full ${statusColor[f.status]} ${f.status === "late" ? "animate-pulse-soft" : ""}`} />
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-medium text-muted-foreground uppercase">{statusLabel[f.status]}</span>
+              <span className={`h-2.5 w-2.5 rounded-full ${statusColor[f.status]} ${f.status === "late" ? "animate-pulse-soft" : ""} ${f.status === "present" ? "animate-glow" : ""}`} />
+            </div>
           </div>
         ))}
       </div>

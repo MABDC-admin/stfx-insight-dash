@@ -8,7 +8,7 @@ import {
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: GraduationCap, label: "Enrollment", path: "/students" },
+  { icon: GraduationCap, label: "Enrollment", path: "/enrollment" },
   { icon: Users, label: "Students", path: "/students" },
   { icon: Shield, label: "Faculty", path: "/teachers" },
   { icon: BookOpen, label: "Curriculum", path: "/subjects" },

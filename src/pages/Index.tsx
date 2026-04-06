@@ -10,9 +10,12 @@ import PerformanceGauge from "@/components/PerformanceGauge";
 import RecentActivity from "@/components/RecentActivity";
 import SideNavigation from "@/components/SideNavigation";
 import MouseFollower from "@/components/MouseFollower";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
 import { useEffect } from "react";
 
 const Index = () => {
+  const { data: stats } = useDashboardStats();
+
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (!theme) {
@@ -28,23 +31,20 @@ const Index = () => {
       <MouseFollower />
       <SideNavigation />
 
-      {/* Main content with sidebar offset */}
       <div className="pl-16 lg:pl-56 transition-all duration-300">
         <div className="p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-7xl space-y-5 relative z-10">
             <DashboardHeader />
             <AnnouncementTicker />
 
-            {/* Stat Cards */}
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-              <StatCard icon={GraduationCap} value={1149} label="Total Learners" change={12} delay={0} headerColor="widget-header-1" />
-              <StatCard icon={Users} value={61} label="Faculty & Staff" change={3} delay={100} headerColor="widget-header-2" />
-              <StatCard icon={BookOpen} value={42} label="Active Sections" change={5} delay={200} headerColor="widget-header-3" />
-              <StatCard icon={School} value={6} label="Grade Levels" change={0} delay={300} headerColor="widget-header-4" />
-              <StatCard icon={Layers} value={97} label="Completion Rate" change={2} delay={400} headerColor="widget-header-5" />
+              <StatCard icon={GraduationCap} value={stats?.totalStudents ?? 0} label="Total Learners" change={12} delay={0} headerColor="widget-header-1" />
+              <StatCard icon={Users} value={stats?.totalTeachers ?? 0} label="Faculty & Staff" change={3} delay={100} headerColor="widget-header-2" />
+              <StatCard icon={BookOpen} value={stats?.activeSections ?? 0} label="Active Sections" change={5} delay={200} headerColor="widget-header-3" />
+              <StatCard icon={School} value={stats?.totalSubjects ?? 0} label="Subjects" change={0} delay={300} headerColor="widget-header-4" />
+              <StatCard icon={Layers} value={stats?.activeEnrollments ?? 0} label="Enrollments" change={2} delay={400} headerColor="widget-header-5" />
             </div>
 
-            {/* Chart + Distribution */}
             <div className="grid gap-4 lg:grid-cols-3">
               <div className="lg:col-span-2">
                 <AttendanceChart />
@@ -52,13 +52,11 @@ const Index = () => {
               <GradeDistribution />
             </div>
 
-            {/* KPIs + Events */}
             <div className="grid gap-4 md:grid-cols-2">
               <PerformanceGauge />
               <UpcomingEvents />
             </div>
 
-            {/* Faculty + Activity */}
             <div className="grid gap-4 md:grid-cols-2">
               <FacultyStatus />
               <RecentActivity />

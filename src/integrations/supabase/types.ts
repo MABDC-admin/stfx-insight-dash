@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          remarks: string | null
+          section_id: string | null
+          status: Database["public"]["Enums"]["attendance_status"]
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          remarks?: string | null
+          section_id?: string | null
+          status?: Database["public"]["Enums"]["attendance_status"]
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          remarks?: string | null
+          section_id?: string | null
+          status?: Database["public"]["Enums"]["attendance_status"]
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       enrollments: {
         Row: {
           created_at: string
@@ -67,6 +100,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      grades: {
+        Row: {
+          created_at: string
+          grade: number
+          id: string
+          quarter: Database["public"]["Enums"]["grade_quarter"]
+          remarks: string | null
+          school_year: string
+          section_id: string | null
+          student_id: string
+          subject_id: string
+          teacher_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          grade: number
+          id?: string
+          quarter: Database["public"]["Enums"]["grade_quarter"]
+          remarks?: string | null
+          school_year: string
+          section_id?: string | null
+          student_id: string
+          subject_id: string
+          teacher_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          grade?: number
+          id?: string
+          quarter?: Database["public"]["Enums"]["grade_quarter"]
+          remarks?: string | null
+          school_year?: string
+          section_id?: string | null
+          student_id?: string
+          subject_id?: string
+          teacher_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       section_subjects: {
         Row: {
@@ -445,7 +520,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      attendance_status: "present" | "absent" | "late" | "excused"
       enrollment_status: "enrolled" | "pending" | "cancelled" | "completed"
+      grade_quarter: "Q1" | "Q2" | "Q3" | "Q4"
       school_level: "elementary" | "junior_high" | "senior_high"
       semester: "first" | "second"
       shs_strand:
@@ -594,7 +671,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      attendance_status: ["present", "absent", "late", "excused"],
       enrollment_status: ["enrolled", "pending", "cancelled", "completed"],
+      grade_quarter: ["Q1", "Q2", "Q3", "Q4"],
       school_level: ["elementary", "junior_high", "senior_high"],
       semester: ["first", "second"],
       shs_strand: [
